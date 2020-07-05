@@ -5,7 +5,10 @@ require "rmagick"
 include Magick
 
 class SquarePad
-  def self.pad!(image_file_name, pad_percentage = 10)
+  DEFAULT_PADDING_PERCENTAGE = 10
+  INSTAGRAM_MAX_LENGTH = 1080
+
+  def self.pad!(image_file_name, pad_percentage = DEFAULT_PADDING_PERCENTAGE)
     image = ImageList.new(image_file_name).first
 
     width = image.columns
@@ -32,6 +35,7 @@ class SquarePad
 
     image
       .border(width_padding, height_padding, 'white')
+      .resize_to_fit(INSTAGRAM_MAX_LENGTH)
       .write(image_file_name) { self.quality = 100 }
   end
 end
